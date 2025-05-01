@@ -1,0 +1,106 @@
+*{
+  all: unset; 
+  font-family: 'Caskaydia Cove Nerd Font', monospace;
+}
+.bar_widget{
+  //backdrop-filter: blur();
+  background: #181825;
+  border-radius: 10px;
+  //box-shadow: 5px 5px 10px 2px rgb(1 1 1 / 0.8);
+}
+//Workspaces 
+.widget_breaker{
+  color: #585b70;
+  font-size: 26px;
+  margin: 0 10 0 100;
+}
+.widget_breaker2{
+  color: #585b70;
+  font-size: 26px;
+  margin: 0 0 0 100;
+}
+.workspace_box{
+  background-color: #1e1e2e;
+  margin: 4px 0 0 -50;
+  border-radius: 10px;
+  padding: 4px; 
+}
+.active{
+  color: #f4b8e4;
+  font-size: 22px;
+}
+.inactive{
+  font-size: 18px;
+  color: #626880;
+}
+.widget_clock{
+  background-color: #1e1e2e;
+  color: #f4b8e4;
+  margin: 4px 10px 4px 0;
+  border-radius: 10px;
+  padding: 1 10 1 10; 
+}
+.widget_monitor{
+  margin: 0 -80 0 80;
+}
+.widget_battery{
+  padding: 0; 
+  color: #f4b8e4;
+  margin: 4px 0 4px 0;
+}
+.widget_memory{
+  padding: 0; 
+  color: #f4b8e4;
+  margin: 4px 0 4px 0;
+}
+.widget_control_center_button{
+  background-color: #1e1e2e;
+  color: #f4b8e4;
+  margin: 4px 10px 4px 0;
+  border-radius: 10px;
+  padding: 1 10 1 10; 
+  margin-left: -50px;  
+}
+.widget_breaker3{ 
+  color: #585b70;
+  font-size: 26px;
+  padding: 0px;
+  margin-left: -50px; 
+  // background-color: #000;
+}
+.widget_control_center{
+}
+/*
+DOCK SCSS
+*/
+.widget_apps{
+  background-color: #181825;
+  padding: 0 0 0 0;
+  border-radius: 24px;
+}
+$widget_colors: (
+  brave: #f5a97f,
+  termi: #c6a0f6,
+  neovi: #f5bde6,
+  disco: #8aadf4,
+  spotu: #a6da95
+);
+@each $name, $color in $widget_colors {
+  .widget_apps_#{$name}_button {
+    color: $color;
+  }
+}
+.widget_apps_brave_button, .widget_apps_termi_button, .widget_apps_neovi_button, .widget_apps_disco_button, .widget_apps_spotu_button{
+  font-size: 30px;
+  margin: 10 10 10 10;  
+  /*transition: font-size 0.3s ease;*/
+  transition: background-color 0.7s ease, border-radius 0.7s ease, border 0.7s ease;
+  &:hover{
+    background-color: #1e1e2e;
+    border-radius: 16px;
+    border: 2px solid #313244;  
+    /*font-size: 38px;
+    margin: 0 10 0 10; 
+    padding: 1 10 1 10;*/ 
+  }
+}

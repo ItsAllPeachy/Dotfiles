@@ -1,0 +1,215 @@
+(defvar eww "eww -c $HOME/.config/eww")
+
+;; Music vars and listeners
+(defvar music_reveal false)
+(deflisten music-image :initial  "  " "bash scripts/music_manager.sh --cover"   )
+(defpoll current_song  :interval "1s" "bash scripts/music_manager.sh --song"    )
+(defpoll artist        :interval "1s" "playerctl metadata artist"               )
+(defpoll song_time     :interval "1s" "scripts/music_manager.sh --position_time")
+;; Battery vars and listeners
+(defpoll battery_percent :interval "10s" "bash scripts/battery_manager.sh --percent")
+(defpoll battery_icon    :interval "10s" "bash scripts/battery_manager.sh --icon")
+;; Memory vars and listeners
+(defpoll memory_percent  :interval "10s" "bash scripts/memory_manager.sh --used")
+;; Temparature and CPU Vars
+(defpoll cpu_percent :interval "10s" "python3 scripts/cputemp.py --temp")
+(defpoll cpu_icon    :interval "10s" "python3 scripts/cputemp.py --icon")
+;; Time vars and listeners 
+(defpoll time :interval "1s" "date '+%H|%M'")
+;; Control Center Vars
+(defpoll wifi_icon :interval "15s" "bash scripts/wifi_manager.sh --icon")
+(defpoll brightness_icon :interval "15s" "bash scripts/brightness_manager.sh --icon")
+(defpoll volume_icon :interval "15s" "bash scripts/volume_manager.sh --icon")
+
+;; DOCK ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defwindow dock
+  :monitor 0
+  :windowtype "dock"
+  :geometry (geometry :x "0.4%"
+                      :y "0%"
+                      :width "4%"
+                      :height "30%"
+                      :anchor "right center")
+  :reserve (struts :side "right" :distance "4%")
+(dockwidget))
+
+(defwidget dockwidget []
+  (box :class "widget_apps" 
+       :orientation "v"
+  (button :class "widget_apps_brave_button" :onclick "brave & disown                         " "")
+  (button :class "widget_apps_termi_button" :onclick "kitty & disown                         " "")
+  (button :class "widget_apps_neovi_button" :onclick "kitty -e nvim & disown                 " "")
+  (button :class "widget_apps_disco_button" :onclick "flatpak run dev.vencord.Vesktop        " "")
+  (button :class "widget_apps_spotu_button" :onclick "flatpak run com.github.KRTirtho.Spotube" "")))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defwidget breaker[]
+  (box :class "widget_breaker" "⸸")
+)
+(defwidget breaker2[]
+  (box :class "widget_breaker2" "⸸")
+)
+(defwidget breaker_three[]
+  (box :class "widget_breaker3" "⸸")
+)
+
+
+
+(defwindow bar
+  :monitor 0
+  :windowtype "dock"
+  :geometry (geometry :x "0%"
+                      :y "0.4%"
+                      :width "95%"
+                      :height "4%"
+                      :anchor "top center")
+  :reserve (struts :side "top" 
+                   :distance "4%")
+  (barwidget)
+)
+
+(defwidget barwidget[]
+  (box :class "bar_widget"
+       :orientation "h"
+    (left)
+    (right)
+  )
+)
+
+(defwidget left []
+  (box :class "widget_left"
+       :orientation "h"
+       :halign "start"
+       :spacing 50
+    (launcher)
+    (workspaces)
+  )
+)
+(defwidget launcher[]
+  (box :class "widget_launcher"
+    (button :class "widget_launcher_button" 
+            :onclick "wofi --show drun --insensitive --allow-images & disown"
+      (image :class "widget_launcher_button_image"
+             :path "~/Pictures/NixOS.svg" 
+             :image-width 32
+             :image-height 32
+             :icon "nixos_logo"
+      )
+    )
+  )
+)
+(deflisten workspace "scripts/workspaces.sh")
+(defwidget workspaces []
+  (literal :content workspace)
+)
+
+
+
+
+
+(defwidget right[]
+  (box :class "widget_right"
+       :orientation "h"
+       :halign "end"
+    (control_center)    
+    (monitors)
+    (breaker)
+    (clock)
+  )
+)
+(defwidget clock []
+  (box :class "widget_clock"
+       :orientation "h"
+    (button :class "widget_clock_button1" time)
+    (button :class "widget_clock_button2" :onclick "more_popup" "󱞪")
+  )
+)
+(defwidget bat []
+  (box :class "widget_battery" :vexpand "false" :hexpand "false" 
+    (circular-progress :value battery_percent
+                       :class "widget_battery_progress"
+                       :thickness 6
+                       :start-at "75%"
+                       :clockwise "true"
+      (button :class "widget_battery_icon"
+              :limit-width 2
+              :tooltip "battery on ${battery_percent}%"
+              :show_truncated false
+              :onclick ""
+              :wrap false "${battery_icon}"
+      )
+    ) 
+  )
+)
+(defwidget mem []
+  (box :class "widget_memory" :vexpand "false" :hexpand "false" 
+    (circular-progress :value memory_percent
+                       :class "widget_memory_progress"
+                       :thickness 6
+                       :start-at "50%"
+                       :clockwise "true"
+      (button :class "widget_memory_icon"
+              :limit-width 2
+              :tooltip "${memory_percent}% used"
+              :show_truncated false
+              :onclick ""
+              :wrap false " "
+      )
+    ) 
+  )
+)
+(defwidget monitors[]
+  (box :class "widget_monitor"
+       :spacing -260
+    (mem)
+    (bat)
+    (breaker_three)
+  )
+)
+(defwidget control_center []
+  (box :class "widget_control_center"
+    (button :class "widget_control_center_button" :onclick "echo 123"
+      (box :spacing -5
+        (control_wifi)
+        (control_bright)
+        (control_volume)
+      )
+    )  
+  )
+)
+(defwidget control_wifi[]
+  (box :class "widget_control_wifi" 
+    (button :class "widget_control_wifi_button" wifi_icon)
+  )
+)
+(defwidget control_bright[]
+  (box :class "widget_control_bright" 
+    (button :class "widget_control_bright_button" brightness_icon)
+  )
+)
+(defwidget control_volume[]
+  (box :class "widget_control_volume"
+    (button :class "widget_control_volume_button"
+            :onclick "pavucontrol & disown" volume_icon
+    )
+  )
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
