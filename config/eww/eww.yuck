@@ -89,12 +89,13 @@
   (box :class "widget_launcher"
     (button :class "widget_launcher_button" 
             :onclick "wofi --show drun --insensitive --allow-images & disown"
-      (image :class "widget_launcher_button_image"
-             :path "~/Pictures/NixOS.svg" 
-             :image-width 32
-             :image-height 32
-             :icon "nixos_logo"
-      )
+            " "
+      ;;(image :class "widget_launcher_button_image"
+      ;;       :path "~/Pictures/NixOS.svg" 
+      ;;       :image-width 32
+      ;;       :image-height 32
+      ;;       :icon "nixos_logo"
+      ;;)
     )
   )
 )
